@@ -3,24 +3,25 @@ package org.spring.learn.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Director")
-public class Director {
+@Table(name = "School")
+public class School {
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @OneToOne
+    @JoinColumn(name = "director_id", referencedColumnName = "id")
+    private Director director;
+
     @Column(name = "name")
     private String name;
 
-    @OneToOne(mappedBy = "director", cascade = CascadeType.ALL)
-    private School school;
-
-    public Director() {
+    public School() {
     }
 
-    public Director(String name) {
+    public School(String name) {
         this.name = name;
     }
 
@@ -32,6 +33,14 @@ public class Director {
         this.id = id;
     }
 
+    public Director getDirector() {
+        return director;
+    }
+
+    public void setDirector(Director director) {
+        this.director = director;
+    }
+
     public String getName() {
         return name;
     }
@@ -40,21 +49,12 @@ public class Director {
         this.name = name;
     }
 
-    public School getSchool() {
-        return school;
-    }
-
-    public void setSchool(School school) {
-        this.school = school;
-    }
-
-
     @Override
     public String toString() {
-        return "Director{" +
+        return "School{" +
                 "id=" + id +
+                ", director=" +
                 ", name='" + name + '\'' +
-                ", school=" +
                 '}';
     }
 }

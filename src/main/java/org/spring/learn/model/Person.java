@@ -2,9 +2,12 @@ package org.spring.learn.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
-@Table(name = "Director")
-public class Director {
+@Table(name = "person")
+public class Person {
 
     @Id
     @Column(name = "id")
@@ -14,14 +17,19 @@ public class Director {
     @Column(name = "name")
     private String name;
 
-    @OneToOne(mappedBy = "director", cascade = CascadeType.ALL)
-    private School school;
+    @Column(name = "age")
+    private int age;
 
-    public Director() {
+    @OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
+    private Passport passport;
+
+
+    public Person() {
     }
 
-    public Director(String name) {
+    public Person(String name, int age) {
         this.name = name;
+        this.age = age;
     }
 
     public int getId() {
@@ -40,21 +48,29 @@ public class Director {
         this.name = name;
     }
 
-    public School getSchool() {
-        return school;
+    public int getAge() {
+        return age;
     }
 
-    public void setSchool(School school) {
-        this.school = school;
+    public void setAge(int age) {
+        this.age = age;
     }
 
+    public Passport getPassport() {
+        return passport;
+    }
+
+    public void setPassport(Passport passport) {
+        this.passport = passport;
+        passport.setPerson(this);
+    }
 
     @Override
     public String toString() {
         return "Director{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", school=" +
+                ", age=" + age +
                 '}';
     }
 }

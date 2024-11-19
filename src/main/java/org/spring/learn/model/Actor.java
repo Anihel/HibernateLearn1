@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-public class Movie {
+@Table(name = "Actor")
+public class Actor {
 
     @Id
     @Column(name = "id")
@@ -16,18 +17,23 @@ public class Movie {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "year_of_production")
-    private int YearOfProduction;
+    @Column(name = "age")
+    private int age;
 
-    @ManyToMany(mappedBy = "movies")
-    private List<Actor> actors;
+    @ManyToMany
+    @JoinTable(
+            name = "actor_movie",
+            joinColumns = @JoinColumn(name = "actor_id"),
+            inverseJoinColumns = @JoinColumn(name = "movie_id")
+    )
+    private List<Movie> movies;
 
-    public Movie() {
+    public Actor() {
     }
 
-    public Movie(String name, int yearOfProduction) {
+    public Actor(String name, int age) {
         this.name = name;
-        this.YearOfProduction = yearOfProduction;
+        this.age = age;
     }
 
     public int getId() {
@@ -46,41 +52,43 @@ public class Movie {
         this.name = name;
     }
 
-    public int getYearOfProduction() {
-        return YearOfProduction;
+    public int getAge() {
+        return age;
     }
 
-    public void setYearOfProduction(int yearOfProduction) {
-        YearOfProduction = yearOfProduction;
+    public void setAge(int age) {
+        this.age = age;
     }
 
-    public List<Actor> getActors() {
-        return actors;
+    public List<Movie> getMovies() {
+        return movies;
     }
 
-    public void setActors(List<Actor> actors) {
-        this.actors = actors;
+    public void setMovies(List<Movie> movies) {
+        this.movies = movies;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Movie movie = (Movie) o;
-        return id == movie.id && YearOfProduction == movie.YearOfProduction && Objects.equals(name, movie.name);
+        Actor actor = (Actor) o;
+        return id == actor.id && age == actor.age && Objects.equals(name, actor.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, YearOfProduction);
+        return Objects.hash(id, name, age);
     }
+
+
 
     @Override
     public String toString() {
-        return "Movie{" +
+        return "Actor{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", YearOfProduction='" + YearOfProduction + '\'' +
+                ", age=" + age +
                 '}';
     }
 }

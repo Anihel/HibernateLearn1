@@ -3,38 +3,31 @@ package org.spring.learn;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.mapping.Collection;
-import org.spring.learn.model.Director;
+import org.spring.learn.model.Actor;
 import org.spring.learn.model.Movie;
-
-import java.util.Collections;
-import java.util.ArrayList;
-import java.util.List;
 
 public class App {
     public static void main(String[] args) {
-        Configuration configuration = new Configuration().addAnnotatedClass(Director.class)
+        Configuration configuration = new Configuration().addAnnotatedClass(Actor.class)
                 .addAnnotatedClass(Movie.class);
 
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.getCurrentSession();
 
-        try {
+        try (sessionFactory) {
             session.beginTransaction();
 
-            Director director = new Director("director1", 1996);
-            director.addMovie(new Movie("NameMovie2", 2007));
-            director.addMovie(new Movie("NameMovie3", 2007));
-            director.addMovie(new Movie("NameMovie4", 2007));
+            Actor actor = session.get(Actor.class, 2);
+            System.out.println(actor.getMovies());
 
-            session.persist(director);
+
+            Movie movieToRemove = actor.getMovies().get(0);
+
+            actor.getMovies().remove(0);
+            movieToRemove.getActors().remove(actor);
+
 
             session.getTransaction().commit();
-        } finally {
-            sessionFactory.close();
         }
-
-
-
     }
 }
